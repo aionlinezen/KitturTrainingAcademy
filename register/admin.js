@@ -1,5 +1,5 @@
 const API_BASE = "https://your-render-backend.onrender.com/api";
-const TENANT_ID = "your-tenant-id";
+const TENANT_ID = "ABC-123456789-ABC";
 
 let token = null;
 
