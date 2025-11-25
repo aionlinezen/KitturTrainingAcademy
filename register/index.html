@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title id="page-title">SSC Exam Coaching Registration</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1 id="title">SSC Exam Coaching 2025 Registration</h1>
+    <h2 id="institute">Your Institute</h2>
+    <p>Secure your spot for the upcoming SSC coaching. Limited seats available!</p>
+  </header>
+
+  <section class="hook">
+    <h2>🔥 Only a Few Seats Left!</h2>
+    <p>Join successful candidates who cracked SSC with our proven system.</p>
+    <div class="scarcity">
+      <p><strong>Seats Remaining:</strong> <span id="seat-count">12</span></p>
+      <p><strong>Offer Ends In:</strong> <span id="countdown">00d 00h 00m 00s</span></p>
+    </div>
+  </section>
+
+  <section class="funnel">
+    <h2>Why Register?</h2>
+    <ul>
+      <li>✅ Expert-curated study materials</li>
+      <li>✅ Mock tests and performance analytics</li>
+      <li>✅ Personalized guidance and support</li>
+    </ul>
+  </section>
+
+  <section class="registration">
+    <h2>Register Now</h2>
+    <form id="registration-form">
+      <input type="text" id="name" placeholder="Full Name" required/>
+      <input type="email" id="email" placeholder="Email Address" required/>
+      <input type="tel" id="phone" placeholder="Phone Number" required/>
+      <button id="pay-button" type="submit" class="cta">
+        <span id="cta-text">
+          Pay & Register For Master Class starting on <span id="class-date">Dec 14th</span> @
+          <span class="strikethrough" id="original-price">₹15999</span>
+          <span class="price-badge" id="discounted-price">₹12999</span>
+          <span class="save-badge">Save 18% Click Here</span>
+        </span>
+      </button>
+    </form>
+  </section>
+
+  <section class="testimonials">
+    <h2>Success Stories</h2>
+    <div id="testimonials-list" class="testimonials-grid"></div>
+  </section>
+
+  <footer>
+    <p>© 2025 SSC Prep. All rights reserved.</p>
+    <p><a href="./admin.html">Owner login</a></p>
+  </footer>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
