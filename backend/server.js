@@ -7,9 +7,15 @@ import jwt from "jsonwebtoken";
 import { Resend } from "resend";
 import { v2 as cloudinary } from "cloudinary";
 import formidable from "formidable";
+import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
 const app = express();
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // CORS allowlist (update to your GitHub Pages origin)
 app.use(cors({
