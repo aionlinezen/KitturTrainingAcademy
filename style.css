@@ -1,0 +1,105 @@
+:root {
+  --primary: #004080;   /* Deep blue */
+  --accent: #d32f2f;    /* Red accent */
+  --background: #f4f4f4;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  background: var(--background);
+  color: #333;
+}
+
+header, footer {
+  background: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 1.5em;
+}
+
+section {
+  padding: 2em;
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  margin-top: 1em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+form input, form button {
+  display: block;
+  width: 100%;
+  margin: 1em 0;
+  padding: 0.75em;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.cta {
+  background: #008000;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0.75em;
+  border-radius: 4px;
+}
+.cta:hover { background: #006400; }
+
+.hook {
+  background: #fff8e1;
+  padding: 1.5em;
+  text-align: center;
+  border-bottom: 2px solid #ffd700;
+}
+
+.scarcity {
+  font-size: 1.2em;
+  margin-top: 1em;
+  color: var(--accent);
+}
+
+.testimonials {
+  padding: 2em;
+  background: #e3f2fd;
+  border-radius: 8px;
+  margin: 2em auto;
+  max-width: 900px;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
+  gap: 1.5em;
+}
+
+.testimonial {
+  text-align: left;
+  margin-bottom: 1em;
+}
+
+.testimonial img {
+  width: 100px;
+  border-radius: 50%;
+  margin-bottom: 1em;
+}
+
+.strikethrough { text-decoration: line-through; color: #999; }
+.price-badge {
+  color: #ffeb3b;
+  background: var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin: 0 4px;
+}
+.save-badge {
+  background: #ffeb3b;
+  color: #000;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
