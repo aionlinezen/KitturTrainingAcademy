@@ -1,4 +1,4 @@
-const API_BASE = "https://ssc-funnel-backend.onrender.com/api";
+const API_BASE = "https://backendtutuion.onrender.com/api";
 const TENANT_ID = "your-tenant-id"; // change per institute
 
 // Load settings
