@@ -1,23 +1,59 @@
 const API_BASE = "https://ssc-funnel-backend.onrender.com/api";
-const TENANT_ID = "kittur-training-academy";
-
+const TENANT_ID = "your-tenant-id"; // set per institute
 let token = null;
 
-// Login
+// Login (with forced reset flow)
 document.getElementById("login-btn").addEventListener("click", async () => {
   const email = document.getElementById("admin-email").value.trim();
   const password = document.getElementById("admin-password").value.trim();
   const res = await fetch(`${API_BASE}/auth/login`, {
     method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password, tenantId: TENANT_ID })
   });
   if (!res.ok) { alert("Login failed"); return; }
-  const data = await res.json(); token = data.token;
+  const data = await res.json();
+  token = data.token;
+
+  // Force reset UI
+  if (data.forceReset) {
+    document.getElementById("login-section").style.display = "none";
+    document.getElementById("reset-section").style.display = "block";
+    document.getElementById("reset-email").value = email;
+    return;
+  }
+
+  proceedToDashboard();
+});
+
+document.getElementById("reset-btn").addEventListener("click", async () => {
+  const email = document.getElementById("reset-email").value.trim();
+  const newPassword = document.getElementById("reset-password").value.trim();
+  if (!newPassword || newPassword.length < 8) { alert("Password must be at least 8 characters"); return; }
+  const res = await fetch(`${API_BASE}/auth/reset`, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, tenantId: TENANT_ID, newPassword })
+  });
+  if (!res.ok) { alert("Password reset failed"); return; }
+  alert("Password updated. Please login again.");
+  window.location.reload();
+});
+
+function proceedToDashboard() {
   document.getElementById("login-section").style.display = "none";
   ["settings-section","razorpay-section","testimonials-section","registrations-section"]
     .forEach(id => document.getElementById(id).style.display = "block");
-  await loadAdminData();
-});
+  loadAdminData();
+}
+
+// Helpers
+function toInputDateTime(iso) {
+  const d = new Date(iso);
+  const pad = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function escapeHtml(str) {
+  return (str || "").replace(/[&<>"]/g, s => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;" }[s]));
+}
 
 // Load settings/testimonials/registrations
 async function loadAdminData() {
@@ -27,7 +63,7 @@ async function loadAdminData() {
     settings.registrationLastDate ? toInputDateTime(settings.registrationLastDate) : "";
   document.getElementById("enrollmentFee").value = settings.enrollmentFee ?? 12999;
   document.getElementById("titleInput").value = settings.title || "SSC Exam Coaching 2025 Registration";
-  document.getElementById("instituteInput").value = settings.institute || "Kittur Training Academy";
+  document.getElementById("instituteInput").value = settings.institute || "Your Institute";
   document.getElementById("themePrimary").value = settings.theme?.primary || "#004080";
   document.getElementById("themeAccent").value = settings.theme?.accent || "#d32f2f";
   document.getElementById("themeBackground").value = settings.theme?.background || "#f4f4f4";
@@ -64,4 +100,69 @@ async function loadAdminData() {
   });
   const registrations = await rRes.json();
   const tbody = document.getElementById("registrations-table");
-  tbody.innerHTML
+  tbody.innerHTML = "";
+  registrations.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${escapeHtml(r.name)}</td>
+      <td>${escapeHtml(r.email)}</td>
+      <td>${escapeHtml(r.phone)}</td>
+      <td>${escapeHtml(r.status)}</td>
+      <td>${new Date(Number(r.ts)).toLocaleString()}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Save settings
+document.getElementById("save-settings-btn").addEventListener("click", async () => {
+  const payload = {
+    tenantId: TENANT_ID,
+    registrationLastDate: document.getElementById("registrationLastDate").value || null,
+    enrollmentFee: Number(document.getElementById("enrollmentFee").value) || 12999,
+    theme: {
+      primary: document.getElementById("themePrimary").value,
+      accent: document.getElementById("themeAccent").value,
+      background: document.getElementById("themeBackground").value,
+    },
+    title: document.getElementById("titleInput").value.trim(),
+    institute: document.getElementById("instituteInput").value.trim()
+  };
+  const res = await fetch(`${API_BASE}/settings`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(payload)
+  });
+  if (res.ok) alert("Settings saved"); else alert("Failed to save settings");
+});
+
+// Save Razorpay keys
+document.getElementById("save-razorpay-btn").addEventListener("click", async () => {
+  const keyId = document.getElementById("razorpayKeyId").value.trim();
+  const keySecret = document.getElementById("razorpayKeySecret").value.trim();
+  const res = await fetch(`${API_BASE}/payments/keys`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tenantId: TENANT_ID, keyId, keySecret })
+  });
+  if (res.ok) alert("Razorpay keys updated"); else alert("Failed to update keys");
+});
+
+// Add testimonial
+document.getElementById("add-testimonial-btn").addEventListener("click", async () => {
+  const payload = {
+    tenantId: TENANT_ID,
+    name: document.getElementById("t-name").value.trim(),
+    text: document.getElementById("t-text").value.trim(),
+    videoUrl: document.getElementById("t-video").value.trim() || null,
+    photoUrl: document.getElementById("t-photo").value.trim() || null,
+    visible: document.getElementById("t-visible").value === "true",
+    order: Number(document.getElementById("t-order").value) || null
+  };
+  const res = await fetch(`${API_BASE}/testimonials`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(payload)
+  });
+  if (res.ok) { alert("Added"); loadAdminData(); } else { alert("Failed to add"); }
+});
