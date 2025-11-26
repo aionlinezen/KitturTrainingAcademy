@@ -13,7 +13,7 @@ document.getElementById("login-btn").addEventListener("click", async () => {
   if (!res.ok) { alert("Login failed"); return; }
   const data = await res.json();
   token = data.token;
-
+  console.log(token);
   // Force reset UI
   if (data.forceReset) {
     document.getElementById("login-section").style.display = "none";
