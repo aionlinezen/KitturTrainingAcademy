@@ -1,5 +1,5 @@
 const API_BASE = "https://backendtutuion.onrender.com/api";
-const TENANT_ID = "your-tenant-id"; // set per institute
+const TENANT_ID = "kittur-training-academy1"; // set per institute
 let token = null;
 
 // Login (with forced reset flow)
